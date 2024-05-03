@@ -26,3 +26,64 @@ button {
   font-size: var(--font-family);
   color: var(--primary-color);
 }
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filters input[type="text"] {
+  width: 200px;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.filters input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff; /* Change border color on focus */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+  .filters {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .filters input[type="text"] {
+    width: calc(50% - 10px); /* Adjust as needed */
+    margin-bottom: 10px;
+  }
+}
+
+.filters select {
+  width: 200px;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #007bff; /* Change border color on focus */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+  .filters {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .filters select {
+    width: calc(50% - 10px); /* Adjust as needed */
+    margin-bottom: 10px;
+  }
+}

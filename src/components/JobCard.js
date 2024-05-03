@@ -23,6 +23,8 @@ const JobCard = ({
       return minExp + "+";
     } else if (minExp === null) {
       return maxExp;
+    } else if (minExp === maxExp) {
+      return minExp;
     } else {
       return `${minExp} - ${maxExp}`;
     }
