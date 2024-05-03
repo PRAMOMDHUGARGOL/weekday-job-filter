@@ -6,6 +6,13 @@ const initialState = {
   loading: false,
   error: null,
   response: "",
+  originalJobs: [], // Store the original list of jobs
+  filters: {
+    minExp: null,
+    companyName: "", // Initialize companyName filter
+    location: "", // Initialize location filter
+    // Add other filters as needed
+  },
 };
 
 const API_URL = "https://api.weekday.technology/adhoc/getSampleJdJSON";
@@ -44,6 +51,11 @@ const jobSlice = createSlice({
     clearResponse(state) {
       state.response = "";
     },
+    setFilter(state, action) {
+      const { filterName, value } = action.payload;
+      state.filters[filterName] = value;
+      applyFilters(state);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -52,6 +64,7 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.jobs = action.payload;
+        state.originalJobs = action.payload; // Store the original list of jobs
         state.loading = false;
         state.response = "Jobs successfully fetched.";
       })
@@ -62,6 +75,27 @@ const jobSlice = createSlice({
   },
 });
 
-export const { updateState, clearResponse } = jobSlice.actions;
+const applyFilters = (state) => {
+  const { minExp, companyName, location } = state.filters;
+  let filteredJobs = state.originalJobs;
+
+  if (minExp !== null) {
+    filteredJobs = filteredJobs.filter((job) => job.minExp <= minExp);
+  }
+  if (companyName) {
+    filteredJobs = filteredJobs.filter((job) =>
+      job.companyName.toLowerCase().includes(companyName.toLowerCase())
+    );
+  }
+  if (location) {
+    filteredJobs = filteredJobs.filter((job) =>
+      job.location.toLowerCase().includes(location.toLowerCase())
+    );
+  }
+
+  state.jobs = filteredJobs;
+};
+
+export const { updateState, clearResponse, setFilter } = jobSlice.actions;
 
 export default jobSlice.reducer;
