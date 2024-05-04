@@ -60,3 +60,31 @@ button {
     grid-template-columns: 1fr; /* Single column layout on small screens */
   }
 }
+
+.miscContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px; /* Add margin-bottom */
+}
+
+.clearButton {
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #666;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.jobCount p {
+  font-size: 16px; /* Increase font size for better visibility */
+  color: #333; /* Darken text color for better contrast */
+  margin: 0;
+  padding: 5px; /* Add some padding for spacing */
+  font-weight: 600; /* Increase font weight for emphasis */
+  font-family: "Poppins", sans-serif; /* Apply Poppins font */
+}

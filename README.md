@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# Job Listing Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This web application is designed to help users find job listings based on various filters such as experience level, company name, location, job type, role, and minimum base pay. Users can search for jobs, apply filters to narrow down their search, and view detailed job descriptions. The application provides a seamless and responsive user experience, allowing users to explore job opportunities effectively.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Job Search**: Users can search for specific job listings based on keywords.
+- **Infinite Scroll**: Load more job listings dynamically as the user scrolls down the page, providing a seamless browsing experience without the need for manual pagination.
+- **Filtering Options**: Apply filters such as experience level, company name, location, job type, role, and minimum base pay to refine job search results.
+- **Responsive Design**: The application is responsive and adapts to different screen sizes, providing a consistent user experience across devices.
+- **Job Details**: View detailed job descriptions, including job role, company name, location, required experience, and minimum base pay.
+- **Clear Filters**: Clear all applied filters with a single click to reset the search criteria.
+- **Back to Top**: Conveniently navigate back to the top of the page with a back-to-top button.
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+- **React**: A JavaScript library for building user interfaces.
+- **Redux**: A predictable state container for managing application state.
+- **Material-UI**: A popular React UI framework for building responsive and customizable user interfaces.
+- **Axios**: A promise-based HTTP client for making API requests.
+- **CSS**: Cascading Style Sheets for styling the components and layout of the application.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+### Running the App Locally
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run the app on your local machine, follow these steps:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Cloning the Repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone this repository** to your local machine using the following command:
+   ```bash
+   git clone <repository_url>
+   ```
 
-### `npm run eject`
+### Navigating to the Project Directory
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Navigate to the project directory** in your terminal:
+   ```bash
+   cd path/to/project-directory
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installing Dependencies
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. **Install the dependencies** required for the project by running:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+   This command will install all the necessary packages and libraries specified in the `package.json` file.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Starting the Development Server
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. **Run the development server** by executing the following command:
 
-### Code Splitting
+   ```bash
+   npm run dev
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   This command starts a local development server, allowing you to view and interact with the app in your browser.
 
-### Analyzing the Bundle Size
+### Viewing the App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. **Open your web browser** and navigate to [http://localhost:3000](http://localhost:3000) to view the app.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The app should now be running locally on your machine, and you can explore its functionality.

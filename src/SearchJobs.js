@@ -5,13 +5,21 @@ import JobCard from "./components/JobCard";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobs, setFilter, incrementOffset } from "./Features/Jobs";
+import {
+  fetchJobs,
+  setFilter,
+  incrementOffset,
+  clearAllFilters,
+} from "./Features/Jobs";
 import ResponsiveAppBar from "./components/Navbar";
 
 const SearchJobs = () => {
   const dispatch = useDispatch();
-  const { jobs, loading, error, offset } = useSelector((state) => state.jobs);
+  const { jobs, loading, error, offset, originalJobs, totalJobs } = useSelector(
+    (state) => state.jobs
+  );
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     // Fetch initial set of jobs with the current offset
@@ -24,10 +32,12 @@ const SearchJobs = () => {
       !loading
     ) {
       // Increment offset before fetching more jobs
-      setScrollPosition(window.scrollY);
 
+      setScrollPosition(window.scrollY);
       dispatch(incrementOffset());
     }
+
+    setShowBackToTop(window.scrollY > 100);
   };
 
   // Restore scroll position after updating jobs
@@ -51,41 +61,54 @@ const SearchJobs = () => {
   const [role, setRole] = useState("");
   const [minBasePay, setMinBasePay] = useState("");
 
-  const handleMinExpChange = (value) => {
-    const parsedValue = parseInt(value); // or parseFloat(value) for a floating-point number
-    setMinExp(parsedValue);
-    dispatch(setFilter({ filterName: "minExp", value: parsedValue }));
+  const handleInputChange = (filterName, value) => {
+    switch (filterName) {
+      case "minExp":
+        setMinExp(value);
+        break;
+      case "companyName":
+        setCompanyName(value);
+        break;
+      case "location":
+        setLocation(value);
+        break;
+      case "type":
+        setType(value);
+        break;
+      case "role":
+        setRole(value);
+        break;
+      case "minBasePay":
+        setMinBasePay(value);
+        break;
+      default:
+        break;
+    }
+
+    dispatch(setFilter({ filterName, value }));
   };
 
-  const handleCompanyNameChange = (value) => {
-    setCompanyName(value);
-    dispatch(setFilter({ filterName: "companyName", value }));
-  };
+  const handleClearAllFilters = () => {
+    // Reset local filter states to their initial values
+    setMinExp("");
+    setCompanyName("");
+    setLocation("");
+    setType("");
+    setRole("");
+    setMinBasePay("");
 
-  const handleLocationChange = (value) => {
-    setLocation(value);
-    dispatch(setFilter({ filterName: "location", value }));
-  };
-
-  const handleTypeChange = (value) => {
-    setType(value);
-    dispatch(setFilter({ filterName: "type", value }));
-  };
-
-  const handleRoleChange = (value) => {
-    setRole(value);
-    dispatch(setFilter({ filterName: "role", value }));
-  };
-
-  const handleMinBasePayChange = (value) => {
-    setMinBasePay(value);
-    dispatch(setFilter({ filterName: "minBasePay", value }));
+    // Dispatch clearAllFilters action to reset Redux state
+    dispatch(clearAllFilters());
   };
 
   return (
     <>
       <div className="container" style={{ marginTop: "25px" }}>
-        <ResponsiveAppBar numberOfJobs={jobs?.length} />
+        <ResponsiveAppBar
+          numberOfJobs={jobs?.length}
+          showBackToTop={showBackToTop}
+        />
+
         <Backdrop
           open={loading}
           style={{
@@ -124,12 +147,16 @@ const SearchJobs = () => {
                 textAlign: "center", // Center align the contents
               }}
             >
-              {" "}
               <select
-                value={minExp === null ? null : minExp} // Bind input value to minExp from state
-                onChange={(e) => handleMinExpChange(e.target.value)}
+                value={minExp} // Bind input value to minExp from state
+                onChange={(e) => handleInputChange("minExp", e.target.value)}
+                onClick={() =>
+                  setTimeout(() => {
+                    window.scrollTo(0, 0);
+                  }, 0)
+                }
               >
-                <option value={null}>Select min experience</option>
+                <option value="">Select min experience</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                   <option key={value} value={value}>
                     {value === 0 ? value : `${value} Years`}
@@ -140,17 +167,19 @@ const SearchJobs = () => {
                 type="text"
                 value={companyName}
                 placeholder="Company Name"
-                onChange={(e) => handleCompanyNameChange(e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("companyName", e.target.value)
+                }
               />
               <input
                 type="text"
                 placeholder="Location"
                 value={location}
-                onChange={(e) => handleLocationChange(e.target.value)}
+                onChange={(e) => handleInputChange("location", e.target.value)}
               />
               <select
                 value={type} // Bind input value to minExp from state
-                onChange={(e) => handleTypeChange(e.target.value)}
+                onChange={(e) => handleInputChange("type", e.target.value)}
               >
                 <option value="">Select Remote/on-site</option>
                 <option value="Remote">Remote</option>
@@ -158,7 +187,7 @@ const SearchJobs = () => {
               </select>
               <select
                 value={role} // Bind input value to role from state
-                onChange={(e) => handleRoleChange(e.target.value)}
+                onChange={(e) => handleInputChange("role", e.target.value)}
               >
                 <option value="">Select role</option>
                 {[
@@ -177,8 +206,10 @@ const SearchJobs = () => {
                 ))}
               </select>
               <select
-                value={minBasePay === null ? "" : minBasePay} // Bind input value to minBasePay from state
-                onChange={(e) => handleMinBasePayChange(e.target.value)}
+                value={minBasePay} // Bind input value to minBasePay from state
+                onChange={(e) =>
+                  handleInputChange("minBasePay", e.target.value)
+                }
               >
                 <option value="">Select Min Base Pay</option>
                 {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(
@@ -189,6 +220,21 @@ const SearchJobs = () => {
                   )
                 )}
               </select>
+            </div>
+
+            <div className="miscContainer">
+              <button onClick={handleClearAllFilters} className="clearButton">
+                Clear All Filters
+              </button>
+              <div className="jobCount">
+                <p>
+                  {/* {jobs.length} job{jobs.length !== 1 ? "s" : ""} found
+                  {jobs.length !== totalJobs && (
+                    <span> (out of {totalJobs} total)</span>
+                  )} */}
+                  Total Jobs = {totalJobs}
+                </p>
+              </div>
             </div>
 
             {jobs.length > 0 ? (

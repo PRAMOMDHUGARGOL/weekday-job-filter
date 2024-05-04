@@ -14,8 +14,10 @@ const JobCard = ({
   jdLink,
   jdUid,
 }) => {
+  // State to handle expansion of job description
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Function to format experience
   function formatExperience(minExp, maxExp) {
     if (minExp === null && maxExp === null) {
       return 0;
@@ -39,16 +41,18 @@ const JobCard = ({
         display: "flex",
         flexDirection: "column",
         border: "1px solid black",
-        display: "flex",
-        flexDirection: "column",
+        display: "flex", // Duplicate line removed
+        flexDirection: "column", // Duplicate line removed
         justifyContent: "spaceBetween",
       }}
       onClick={(e) => {
         e.preventDefault();
-        // window.open(jdLink, "_blank");
+        // Open job link in a new tab
+        window.open(jdLink, "_blank");
       }}
     >
       <div className="job-card-content" style={{ flexGrow: 1 }}>
+        {/* Company details */}
         <h1 className="job-card-company">
           <div style={{ display: "flex", alignItems: "center" }}>
             <img
@@ -59,18 +63,21 @@ const JobCard = ({
             <span>{companyName}</span>
           </div>
         </h1>
+        {/* Job details */}
         <h2 className="job-card-title">{title}</h2>
         <p className="job-card-location">{location}</p>
+        {/* Experience */}
         <p>
           <span style={{ fontWeight: "bold" }}>
             {formatExperience(minExp, maxExp)}{" "}
           </span>{" "}
-          years of minimum expeierence
+          years of minimum experience
         </p>
-
+        {/* Job description */}
         <p className="job-card-description">
           {isExpanded ? jobDescription : jobDescription.slice(0, 300)}
         </p>
+        {/* Read more button */}
         {jobDescription.length > 300 && (
           <button
             className="read-more-button"
@@ -80,6 +87,7 @@ const JobCard = ({
           </button>
         )}
       </div>
+      {/* Easy Apply button */}
       <div className="job-card-button-container" style={{ marginTop: "auto" }}>
         <button className="job-card-button">
           <div

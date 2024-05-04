@@ -1,26 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Initial state for the jobs slice
 const initialState = {
-  jobs: [],
-  loading: false,
-  error: null,
-  response: "",
+  jobs: [], // List of jobs
+  loading: false, // Indicates if jobs are being fetched
+  error: null, // Stores any error occurred during fetching
+  response: "", // Response message after fetching jobs
   originalJobs: [], // Store the original list of jobs
+  totalJobs: 0, // Total number of jobs available
   filters: {
-    minExp: null,
+    // Initial filter values
+    minExp: "",
     companyName: "", // Initialize companyName filter
     location: "",
     type: "",
     role: "",
-    minBasePay: null,
+    minBasePay: "",
     // Add other filters as needed
   },
-  offset: 0,
+  offset: 0, // Offset for pagination
 };
 
 const API_URL = "https://api.weekday.technology/adhoc/getSampleJdJSON";
 
+// Async thunk to fetch jobs
 export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async (offset) => {
   const requestData = {
     limit: 10,
@@ -38,44 +42,62 @@ export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async (offset) => {
       throw new Error("Network response was not ok");
     }
 
-    return response.data["jdList"];
+    // Return fetched jobs list and total count
+    return [response.data["jdList"], response.data["totalCount"]];
   } catch (error) {
     console.error("Error fetching jobs:", error);
     throw error;
   }
 });
 
+// Reducer slice for jobs
 const jobSlice = createSlice({
   name: "jobs",
   initialState,
   reducers: {
+    // Action to update state
     updateState(state, action) {
       state.updateState = action.payload;
     },
+    // Action to clear response message
     clearResponse(state) {
       state.response = "";
     },
+    // Action to set filter values
     setFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
-      applyFilters(state);
+      applyFilters(state); // Apply filters after updating
     },
+    // Action to increment offset for pagination
     incrementOffset: (state) => {
       state.offset += 10; // Increment offset by 10
+    },
+    // Action to clear all filters
+    clearAllFilters: (state) => {
+      // Reset all filter values to their initial state
+      state.filters = initialState.filters;
+      // Reapply filters to jobs based on the reset filter values
+      applyFilters(state);
     },
   },
   extraReducers: (builder) => {
     builder
+      // Action when fetching jobs is pending
       .addCase(fetchJobs.pending, (state) => {
         state.loading = true;
       })
+      // Action when fetching jobs is fulfilled
       .addCase(fetchJobs.fulfilled, (state, action) => {
-        if (state.offset > 0) state.jobs = [...state.jobs, ...action.payload];
-        else state.jobs = action.payload;
+        if (state.offset > 0)
+          state.jobs = [...state.jobs, ...action.payload[0]];
+        else state.jobs = action.payload[0];
         state.originalJobs = state.jobs;
+        state.totalJobs = action.payload[1];
         state.loading = false;
         state.response = "Jobs successfully fetched.";
       })
+      // Action when fetching jobs is rejected
       .addCase(fetchJobs.rejected, (state, action) => {
         state.error = action.error.message || "Failed to fetch jobs.";
         state.loading = false;
@@ -83,12 +105,13 @@ const jobSlice = createSlice({
   },
 });
 
+// Function to apply filters to jobs
 const applyFilters = (state) => {
   const { minExp, companyName, location, type, role, minBasePay } =
     state.filters;
   let filteredJobs = [...state.originalJobs];
 
-  if (minExp !== null) {
+  if (minExp) {
     filteredJobs = filteredJobs.filter((job) => job.minExp <= minExp);
   }
 
@@ -120,15 +143,27 @@ const applyFilters = (state) => {
     );
   }
 
-  if (minBasePay !== null) {
-    // Filter jobs based on minimum base pay only if it's not null
-    filteredJobs = filteredJobs.filter((job) => job.minJdSalary <= minBasePay);
+  if (minBasePay !== null && minBasePay !== "") {
+    // Filter jobs based on minimum base pay only if it's a number
+    const numericMinBasePay = parseFloat(minBasePay);
+    if (!isNaN(numericMinBasePay)) {
+      filteredJobs = filteredJobs.filter(
+        (job) => job.minJdSalary <= numericMinBasePay
+      );
+    }
   }
 
-  state.jobs = filteredJobs;
+  state.jobs = filteredJobs; // Update filtered jobs in state
 };
 
-export const { updateState, clearResponse, setFilter, incrementOffset } =
-  jobSlice.actions;
+// Export actions
+export const {
+  updateState,
+  clearResponse,
+  setFilter,
+  incrementOffset,
+  clearAllFilters,
+} = jobSlice.actions;
 
+// Export reducer
 export default jobSlice.reducer;
