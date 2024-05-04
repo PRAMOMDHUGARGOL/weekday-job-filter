@@ -2,6 +2,10 @@
 
 This web application is designed to help users find job listings based on various filters such as experience level, company name, location, job type, role, and minimum base pay. Users can search for jobs, apply filters to narrow down their search, and view detailed job descriptions. The application provides a seamless and responsive user experience, allowing users to explore job opportunities effectively.
 
+## Live Demo
+
+- [View Live Demo](https://weekday-job-filter.vercel.app/)
+
 ## Features
 
 - **Job Search**: Users can search for specific job listings based on keywords.
