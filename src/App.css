@@ -27,63 +27,36 @@ button {
   color: var(--primary-color);
 }
 
-.filters {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.filters input[type="text"] {
-  width: 200px;
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.filters input[type="text"]:focus {
-  outline: none;
-  border-color: #007bff; /* Change border color on focus */
-}
-
-/* Responsive styles */
-@media screen and (max-width: 600px) {
-  .filters {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .filters input[type="text"] {
-    width: calc(50% - 10px); /* Adjust as needed */
-    margin-bottom: 10px;
-  }
-}
-
+/* Common styles for input and select elements */
+.filters input[type="text"],
 .filters select {
-  width: 200px;
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  font-family: "Poppins", sans-serif; /* Apply Poppins font */
+  width: calc(100% - 20px); /* Adjust width to accommodate padding */
+  padding: 12px; /* Increase padding for better visual appearance */
+  margin-bottom: 15px; /* Increase margin for better spacing */
+  border: 1px solid #ddd; /* Lighter border color for softer look */
+  border-radius: 8px; /* Increase border radius for rounded corners */
   font-size: 16px;
 }
 
+.filters input[type="text"]:focus,
 .filters select:focus {
   outline: none;
   border-color: #007bff; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add box shadow on focus for emphasis */
+}
+
+/* Grid layout for filter elements */
+.filters {
+  font-family: "Poppins", sans-serif; /* Apply Poppins font */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 20px; /* Increase grid gap for better spacing */
 }
 
 /* Responsive styles */
 @media screen and (max-width: 600px) {
   .filters {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .filters select {
-    width: calc(50% - 10px); /* Adjust as needed */
-    margin-bottom: 10px;
+    grid-template-columns: 1fr; /* Single column layout on small screens */
   }
 }

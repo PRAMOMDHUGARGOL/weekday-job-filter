@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Paper } from "@mui/material";
-import BusinessIcon from "@mui/icons-material/Business";
 import ElectricBoltTwoToneIcon from "@mui/icons-material/ElectricBoltTwoTone";
 import "../styles/jobCard.css";
 
 const JobCard = ({
   title,
   companyName,
+  logo,
   location,
   jobDescription,
   minExp,
@@ -18,15 +18,15 @@ const JobCard = ({
 
   function formatExperience(minExp, maxExp) {
     if (minExp === null && maxExp === null) {
-      return "0";
+      return 0;
     } else if (maxExp === null) {
       return minExp + "+";
     } else if (minExp === null) {
-      return maxExp;
+      return 1;
     } else if (minExp === maxExp) {
       return minExp;
     } else {
-      return `${minExp} - ${maxExp}`;
+      return minExp;
     }
   }
 
@@ -51,16 +51,23 @@ const JobCard = ({
       <div className="job-card-content" style={{ flexGrow: 1 }}>
         <h1 className="job-card-company">
           <div style={{ display: "flex", alignItems: "center" }}>
-            <BusinessIcon style={{ marginRight: "0.5rem" }} />
+            <img
+              src={logo}
+              alt="Company Logo"
+              style={{ width: "48px", height: "48px", marginRight: "1rem" }}
+            />
             <span>{companyName}</span>
           </div>
         </h1>
         <h2 className="job-card-title">{title}</h2>
         <p className="job-card-location">{location}</p>
-        <span style={{ fontWeight: "bold" }}>
-          {formatExperience(minExp, maxExp)}{" "}
-        </span>{" "}
-        years of experience required
+        <p>
+          <span style={{ fontWeight: "bold" }}>
+            {formatExperience(minExp, maxExp)}{" "}
+          </span>{" "}
+          years of minimum expeierence
+        </p>
+
         <p className="job-card-description">
           {isExpanded ? jobDescription : jobDescription.slice(0, 300)}
         </p>

@@ -10,17 +10,21 @@ const initialState = {
   filters: {
     minExp: null,
     companyName: "", // Initialize companyName filter
-    location: "", // Initialize location filter
+    location: "",
+    type: "",
+    role: "",
+    minBasePay: null,
     // Add other filters as needed
   },
+  offset: 0,
 };
 
 const API_URL = "https://api.weekday.technology/adhoc/getSampleJdJSON";
 
-export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async () => {
+export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async (offset) => {
   const requestData = {
-    limit: 102,
-    offset: 0,
+    limit: 10,
+    offset,
   };
 
   try {
@@ -56,6 +60,9 @@ const jobSlice = createSlice({
       state.filters[filterName] = value;
       applyFilters(state);
     },
+    incrementOffset: (state) => {
+      state.offset += 10; // Increment offset by 10
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -63,8 +70,9 @@ const jobSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
-        state.jobs = action.payload;
-        state.originalJobs = action.payload; // Store the original list of jobs
+        if (state.offset > 0) state.jobs = [...state.jobs, ...action.payload];
+        else state.jobs = action.payload;
+        state.originalJobs = state.jobs;
         state.loading = false;
         state.response = "Jobs successfully fetched.";
       })
@@ -76,26 +84,51 @@ const jobSlice = createSlice({
 });
 
 const applyFilters = (state) => {
-  const { minExp, companyName, location } = state.filters;
-  let filteredJobs = state.originalJobs;
+  const { minExp, companyName, location, type, role, minBasePay } =
+    state.filters;
+  let filteredJobs = [...state.originalJobs];
 
   if (minExp !== null) {
     filteredJobs = filteredJobs.filter((job) => job.minExp <= minExp);
   }
+
   if (companyName) {
     filteredJobs = filteredJobs.filter((job) =>
       job.companyName.toLowerCase().includes(companyName.toLowerCase())
     );
   }
+
   if (location) {
     filteredJobs = filteredJobs.filter((job) =>
       job.location.toLowerCase().includes(location.toLowerCase())
     );
   }
 
+  if (type) {
+    filteredJobs = filteredJobs.filter((job) => {
+      if (type.toLowerCase() === "remote") {
+        return job.location.toLowerCase() === "remote";
+      } else {
+        return job.location.toLowerCase() !== "remote";
+      }
+    });
+  }
+
+  if (role) {
+    filteredJobs = filteredJobs.filter(
+      (job) => job?.jobRole.toLowerCase() === role.toLowerCase()
+    );
+  }
+
+  if (minBasePay !== null) {
+    // Filter jobs based on minimum base pay only if it's not null
+    filteredJobs = filteredJobs.filter((job) => job.minJdSalary <= minBasePay);
+  }
+
   state.jobs = filteredJobs;
 };
 
-export const { updateState, clearResponse, setFilter } = jobSlice.actions;
+export const { updateState, clearResponse, setFilter, incrementOffset } =
+  jobSlice.actions;
 
 export default jobSlice.reducer;
