@@ -60,7 +60,7 @@ To run the app on your local machine, follow these steps:
 4. **Run the development server** by executing the following command:
 
    ```bash
-   npm run dev
+   npm start
    ```
 
    This command starts a local development server, allowing you to view and interact with the app in your browser.
